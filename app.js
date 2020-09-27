@@ -47,15 +47,27 @@
 
     // Create Dino Compare Method 1
     // NOTE: Weight in JSON file is in lbs, height in inches. 
-
+    Dino.prototype.CompareWeight = function (humanWeight)
+    {
+        return (this.weight > humanWeight) ? `${this.species} is havier than Human` : `Human is havier than ${this.species}`;
+    }
     
     // Create Dino Compare Method 2
     // NOTE: Weight in JSON file is in lbs, height in inches.
+    Dino.prototype.CompareHeight = function (humanFeet, humanInches)
+    {
 
+    }
     
     // Create Dino Compare Method 3
     // NOTE: Weight in JSON file is in lbs, height in inches.
-
+    Dino.prototype.CompareDiet = function (humanDiet)
+    {
+        if(this.diet == humanDiet)
+        {
+            
+        }
+    }
 
     // Generate Tiles for each Dino in Array
   
