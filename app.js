@@ -5,11 +5,11 @@
         let myRequest = new Request(path_to_file);
         const response = await fetch(myRequest);
         JSONN_DATA = await response.json();
+        InstantiateDinoObjects(JSONN_DATA);
         console.log(JSONN_DATA);
     })("./dino.json");
 
-    // Create Dino Constructor
-    function Dino(species, weight, height, diet, where, when, fact)
+    function Animal(species, weight, height, diet, where, when, fact) 
     {
         this.species = species;
         this.weight = weight;
@@ -18,6 +18,12 @@
         this.where = where;
         this.when = when;
         this.fact = fact;
+    }
+
+     // Create Dino Constructor
+    function Dino(species, weight, height, diet, where, when, fact)
+    {
+        Animal.call(this, species, weight, height, diet, where, when, fact);
     }
     
     // Create Dino Objects
@@ -32,16 +38,12 @@
     // Create Human Object
     let human = {}
 
-    // Use IIFE to get human data from form
-    function GetHumanData()
+    function Human(species, weight, height, diet, where, when, fact)
     {
-            human.name = document.form.name.value;
-            human.feet = document.form.feet.value;
-            human.inches =  document.form.inches.value;
-            human.weight = document.form.weight.value;
-            human.diet = document.form.diet.value;
-
+        Animal.call(this, species, weight, height, diet, where, when, fact);
     }
+
+    // Use IIFE to get human data from form
 
     // Create Dino Compare Method 1
     // NOTE: Weight in JSON file is in lbs, height in inches. 
@@ -60,15 +62,25 @@
         // Add tiles to DOM
 
     // Remove form from screen
+    function RemomveFormFromScreen()
+    {
 
+    }
 
 // On button click, prepare and display infographic
 document.getElementById('btn').addEventListener('click', () => {
-    InstantiateDinoObjects(JSONN_DATA);
-    console.log(dinoArr);
     if(document.forms["dino-compare"].name.value == "" || document.forms["dino-compare"].feet.value == ""   ||
-       document.forms["dino-compare"].inches.value == "" || document.forms["dino-compare"].weight.value == "") {
-        alert("One of the values are empty. Please fill the form data.")
-    }
-    
+         document.forms["dino-compare"].inches.value == "" || document.forms["dino-compare"].weight.value == "") {
+          alert("One of the values are empty. Please fill the form data.")
+     }
+    human = (function GetHumanData() { 
+        const name = document.forms["dino-compare"].name.value;
+        const feet = document.forms["dino-compare"].feet.value;
+        const inches = document.forms["dino-compare"].inches.value;
+        const weight =  document.forms["dino-compare"].weight.value;
+        const diet = document.forms["dino-compare"].diet.value;
+        const species = "Human";
+        return new Human(name, feet, inches, weight, diet, species);
+    })();
+    console.log(human)
 });
