@@ -1,50 +1,13 @@
-//  var myinit = { method:'GET',
-//  headers: 
-//  {
-//      'Content-Type':'application/json'   
-//  },
-//  mode: 'cors',
-//  cache:'default'
-//  };
-//let myRequest = new Request("./dino.json", myinit);
-
-// fetch(myRequest)
-//     .then(function(resp){
-//         return resp.json();
-//     })
-//     .then(function(data){
-//         console.log(data);
-//     }); 
-// const JSON_DATA  =  async function(){
-//         return  fetch(myRequest)
-//         .then(function (response) {
-//             // return if problem
-//             if (response.status !== 200) {
-//                 throw new Error("Looks like there was a problem. Status Code: " +
-//                     response.status);
-//             }
-//             return response.json();
-//         })
-//         .catch(function(err) {
-//             throw new Error(err);
-//         });
-// };
-// const response = await fetch(myRequest);
-// const json = await response.json();
-// console.log(json);
-// let output = JSON_DATA();
-// console.log(output)
-
+    let JSONN_DATA;
     let dinoArr = [];
-    const request = async () => {
-        let myRequest = new Request("./dino.json");
-        const response = await fetch(myRequest);
-        const json = await response.json();
-        console.log(json.Dinos);
-        return json;
-    }
 
-    const JSONN_DATA = request();
+    (async (path_to_file) => {
+        let myRequest = new Request(path_to_file);
+        const response = await fetch(myRequest);
+        JSONN_DATA = await response.json();
+        console.log(JSONN_DATA);
+    })("./dino.json");
+
     // Create Dino Constructor
     function Dino(species, weight, height, diet, where, when, fact)
     {
@@ -56,23 +19,29 @@
         this.when = when;
         this.fact = fact;
     }
-    // Create Dino Objects
     
+    // Create Dino Objects
     function InstantiateDinoObjects(JSONN_DATA)
     {
         dinoArr = JSONN_DATA.Dinos.map(element => {
-            console.log(element)
             return new Dino(element.species,element.weight, element.height, 
                     element.diet, element.where, element.when, element.fact);    
         });
-        console.log(dinoArr);
     }
 
     // Create Human Object
     let human = {}
 
     // Use IIFE to get human data from form
+    function GetHumanData()
+    {
+            human.name = document.form.name.value;
+            human.feet = document.form.feet.value;
+            human.inches =  document.form.inches.value;
+            human.weight = document.form.weight.value;
+            human.diet = document.form.diet.value;
 
+    }
 
     // Create Dino Compare Method 1
     // NOTE: Weight in JSON file is in lbs, height in inches. 
@@ -94,3 +63,12 @@
 
 
 // On button click, prepare and display infographic
+document.getElementById('btn').addEventListener('click', () => {
+    InstantiateDinoObjects(JSONN_DATA);
+    console.log(dinoArr);
+    if(document.forms["dino-compare"].name.value == "" || document.forms["dino-compare"].feet.value == ""   ||
+       document.forms["dino-compare"].inches.value == "" || document.forms["dino-compare"].weight.value == "") {
+        alert("One of the values are empty. Please fill the form data.")
+    }
+    
+});
