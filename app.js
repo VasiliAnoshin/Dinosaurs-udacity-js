@@ -63,10 +63,7 @@
     // NOTE: Weight in JSON file is in lbs, height in inches.
     Dino.prototype.CompareDiet = function (humanDiet)
     {
-        if(this.diet == humanDiet)
-        {
-            
-        }
+        return (this.diet == humanDiet) ? `${this.species} and Human are both ${humanDiet}` : `${this.species} eats ${this.diet} while Human are ${humanDiet}`;
     }
 
     // Generate Tiles for each Dino in Array
