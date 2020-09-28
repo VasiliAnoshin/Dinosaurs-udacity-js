@@ -6,7 +6,6 @@
         const response = await fetch(myRequest);
         JSONN_DATA = await response.json();
         InstantiateDinoObjects(JSONN_DATA);
-        console.log(JSONN_DATA);
     })("./dino.json");
 
     function Animal(species, weight, height, diet, where, when, fact) 
@@ -30,7 +29,7 @@
     function InstantiateDinoObjects(JSONN_DATA)
     {
         dinoArr = JSONN_DATA.Dinos.map(element => {
-            return new Dino(element.species,element.weight, element.height, 
+            return new Dino(element.species,parseInt(element.weight), parseInt(element.height), 
                     element.diet, element.where, element.when, element.fact);    
         });
     }
@@ -38,36 +37,53 @@
     // Create Human Object
     let human = {}
 
-    function Human(species, weight, height, diet, where, when, fact)
+    function Human(species, weight, height, diet, where, when, fact, feet, name)
     {
         Animal.call(this, species, weight, height, diet, where, when, fact);
+        this.name = name;
+        this.feet = feet;
     }
 
-    // Use IIFE to get human data from form
-
     // Create Dino Compare Method 1
-    // NOTE: Weight in JSON file is in lbs, height in inches. 
     Dino.prototype.CompareWeight = function (humanWeight)
     {
         return (this.weight > humanWeight) ? `${this.species} is havier than Human` : `Human is havier than ${this.species}`;
     }
     
     // Create Dino Compare Method 2
-    // NOTE: Weight in JSON file is in lbs, height in inches.
     Dino.prototype.CompareHeight = function (humanInches)
     {
         return (this.height > humanInches) ? `${this.species} are longer than Humman` : `${this.species} are shorter than Humman`;
     }
     
     // Create Dino Compare Method 3
-    // NOTE: Weight in JSON file is in lbs, height in inches.
     Dino.prototype.CompareDiet = function (humanDiet)
     {
-        return (this.diet == humanDiet) ? `${this.species} and Human are both ${humanDiet}` : `${this.species} eats ${this.diet} while Human are ${humanDiet}`;
+        return (this.diet.toLowerCase() == humanDiet.toLowerCase()) ? `${this.species} and Human are both ${humanDiet}` : `${this.species} eats ${this.diet} while Human are ${humanDiet}`;
+    }
+
+    function GenerateRanomFact(dino, human)
+    {   
+        const random = Math.floor(Math.random() * 6) + 1;
+        switch(random)
+        {
+            case 1:
+                return dino.CompareWeight(human.weight);
+            case 2:
+                return dino.CompareHeight(human.height);
+            case 3:
+                return dino.CompareDiet(human.diet);
+            case 4:
+                return dino.fact;
+            case 5:
+                return `${dino.species} live in what is now ${dino.where}`
+            case 6: 
+                return `${dino.species} live in ${dino.when} age`
+        }
     }
 
     // Generate Tiles for each Dino in Array
-    function GenerateTilesForSpecies(dinoArr)
+    function GenerateTilesForSpecies(dinoArr, human)
     {
         let tiles =  dinoArr.map((element) =>{
             const newDiv = document.createElement("div");
@@ -75,6 +91,14 @@
             const lbl = document.createElement("label");
             lbl.innerText = element.species;
             newDiv.appendChild(lbl)
+            const img = document.createElement("img");
+            img.src = `.\\images\\${element.species}.png`;
+            newDiv.appendChild(img);
+            if(element.species != "human"){
+                const fact =  document.createElement("label");
+                fact.innerText = element.species == "Pigeon" ? element.fact : GenerateRanomFact(element,human);
+                newDiv.appendChild(fact);
+            }
             return newDiv;
         })
         return tiles;
@@ -83,8 +107,6 @@
     // Add tiles to DOM
     function AddTilesToDom(tiles)
     {
-        console.log(typeof(tiles))
-        console.log(tiles)
         let main = document.getElementById("grid");
         tiles.forEach(element => 
             main.appendChild(element)
@@ -103,18 +125,22 @@ document.getElementById('btn').addEventListener('click', () => {
     if(document.forms["dino-compare"].name.value == "" || document.forms["dino-compare"].feet.value == ""   ||
          document.forms["dino-compare"].inches.value == "" || document.forms["dino-compare"].weight.value == "") {
           alert("One of the values are empty. Please fill the form data.")
-     }
+          return;
+    }
+     // Use IIFE to get human data from form
     human = (function GetHumanData() { 
         const name = document.forms["dino-compare"].name.value;
         const feet = document.forms["dino-compare"].feet.value;
-        const inches = document.forms["dino-compare"].inches.value;
+        const height = document.forms["dino-compare"].inches.value;
         const weight =  document.forms["dino-compare"].weight.value;
         const diet = document.forms["dino-compare"].diet.value;
-        const species = "Human";
-        return new Human(name, feet, inches, weight, diet, species);
+        const where = "World Wide";
+        const when = "Cenozoic";
+        const species = "human";
+        const fact = "Human are homo sapiens.";
+        return new Human(species, weight, height, diet, where, when, fact, feet, name);
     })();
-    console.log(human);
     RemomveFormFromScreen();
     dinoArr.splice(4,0,human);
-    AddTilesToDom(GenerateTilesForSpecies(dinoArr));
+    AddTilesToDom(GenerateTilesForSpecies(dinoArr, human));
 });
