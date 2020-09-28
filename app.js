@@ -54,9 +54,9 @@
     
     // Create Dino Compare Method 2
     // NOTE: Weight in JSON file is in lbs, height in inches.
-    Dino.prototype.CompareHeight = function (humanFeet, humanInches)
+    Dino.prototype.CompareHeight = function (humanInches)
     {
-
+        return (this.height > humanInches) ? `${this.species} are longer than Humman` : `${this.species} are shorter than Humman`;
     }
     
     // Create Dino Compare Method 3
@@ -67,13 +67,35 @@
     }
 
     // Generate Tiles for each Dino in Array
-  
-        // Add tiles to DOM
+    function GenerateTilesForSpecies(dinoArr)
+    {
+        let tiles =  dinoArr.map((element) =>{
+            const newDiv = document.createElement("div");
+            newDiv.classList.add('grid-item');
+            const lbl = document.createElement("label");
+            lbl.innerText = element.species;
+            newDiv.appendChild(lbl)
+            return newDiv;
+        })
+        return tiles;
+    }
+
+    // Add tiles to DOM
+    function AddTilesToDom(tiles)
+    {
+        console.log(typeof(tiles))
+        console.log(tiles)
+        let main = document.getElementById("grid");
+        tiles.forEach(element => 
+            main.appendChild(element)
+        );
+    }
 
     // Remove form from screen
     function RemomveFormFromScreen()
     {
-
+        const form = document.getElementById("dino-compare");
+        form.style.display = "none";
     }
 
 // On button click, prepare and display infographic
@@ -91,5 +113,8 @@ document.getElementById('btn').addEventListener('click', () => {
         const species = "Human";
         return new Human(name, feet, inches, weight, diet, species);
     })();
-    console.log(human)
+    console.log(human);
+    RemomveFormFromScreen();
+    dinoArr.splice(4,0,human);
+    AddTilesToDom(GenerateTilesForSpecies(dinoArr));
 });
