@@ -35,7 +35,7 @@
     }
 
     // Create Human Object
-    let human = {}
+    let human = {};
 
     function Human(species, weight, height, diet, where, when, fact, feet, name)
     {
@@ -76,9 +76,9 @@
             case 4:
                 return dino.fact;
             case 5:
-                return `${dino.species} live in what is now ${dino.where}`
+                return `${dino.species} live in what is now ${dino.where}`;
             case 6: 
-                return `${dino.species} live in ${dino.when} age`
+                return `${dino.species} live in ${dino.when} age`;
         }
     }
 
@@ -89,8 +89,8 @@
             const newDiv = document.createElement("div");
             newDiv.classList.add('grid-item');
             const lbl = document.createElement("label");
-            lbl.innerText = element.species;
-            newDiv.appendChild(lbl)
+            lbl.innerText = element.species != "human" ? element.species : element.name;
+            newDiv.appendChild(lbl);
             const img = document.createElement("img");
             img.src = `.\\images\\${element.species}.png`;
             newDiv.appendChild(img);
@@ -124,7 +124,7 @@
 document.getElementById('btn').addEventListener('click', () => {
     if(document.forms["dino-compare"].name.value == "" || document.forms["dino-compare"].feet.value == ""   ||
          document.forms["dino-compare"].inches.value == "" || document.forms["dino-compare"].weight.value == "") {
-          alert("One of the values are empty. Please fill the form data.")
+          alert("One of the values are empty. Please fill the form data.");
           return;
     }
      // Use IIFE to get human data from form
