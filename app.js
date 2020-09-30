@@ -24,7 +24,9 @@ function Dino(species, weight, height, diet, where, when, fact)
 {
     Animal.call(this, species, weight, height, diet, where, when, fact);
 }
-    
+
+Dino.prototype = Object.create(Animal.prototype);
+
 // Create Dino Objects
 function InstantiateDinoObjects(JSONN_DATA)
 {
